@@ -11,7 +11,7 @@ import { connectDB } from "./lib/dbConnect.js";
 import { app, server } from "./lib/socket.js";
 
 // Middlewares
-app.use(bodyParser.json({ limit: "30mb", extended: true }));
+app.use(bodyParser.json({ limit: "2mb", extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(

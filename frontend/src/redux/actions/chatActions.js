@@ -76,7 +76,7 @@ export const subscribeToMessages = () => (dispatch, getState) => {
 };
 
 // Unsubscribe from messages via socket
-export const unsubscribeFromMessages = () => (getState) => {
+export const unsubscribeFromMessages = () => (dispatch, getState) => {
   const { socket } = getState().auth;
   if (socket) {
     socket.off("newMessage");

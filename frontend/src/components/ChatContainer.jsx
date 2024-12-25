@@ -11,7 +11,7 @@ import MessageInput from "./MessageInput";
 import { formatMessageTime } from "../lib/utils";
 
 const ChatContainer = () => {
-  const { messages, isMessageLoading, selectedUser } = useSelector(
+  const { messages, isMessagesLoading, selectedUser } = useSelector(
     (state) => state.chat
   );
   const { authUser } = useSelector((state) => state.auth);
@@ -35,7 +35,7 @@ const ChatContainer = () => {
     }
   }, [messages]);
 
-  if (isMessageLoading) {
+  if (isMessagesLoading) {
     return (
       <div className="flex-1 flex flex-col overflow-auto">
         <ChatHeader />

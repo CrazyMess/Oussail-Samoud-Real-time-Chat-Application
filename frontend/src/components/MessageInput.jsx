@@ -8,7 +8,7 @@ const MessageInput = () => {
     const [text, setText] = useState("");
     const [imagePreview, setImagePreview] = useState(null);
     const fileInputRef = useRef(null);
-    const { isSendingMessage } = useSelector((state) => state.chat);
+    const { isSendingMessage, selectedUser } = useSelector((state) => state.chat);
 
     const dispatch = useDispatch();
 
@@ -38,7 +38,8 @@ const MessageInput = () => {
             dispatch(sendMessage({
             text: text.trim(),
             image: imagePreview,
-          }));
+          },
+          selectedUser._id));
     
           // Clear form
           setText("");
