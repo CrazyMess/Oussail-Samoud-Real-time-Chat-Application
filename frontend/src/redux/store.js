@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore} from "@reduxjs/toolkit";
 
 import authReducer from "./reducers/authReducer";
 import chatReducer from './reducers/chatReducer';
@@ -8,7 +8,9 @@ const store = configureStore({
         auth: authReducer,
         chat: chatReducer,
     },
-    
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false,
+    }),
     
 });
 

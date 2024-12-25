@@ -16,7 +16,7 @@ import {
   UPDATE_PROFILE_REQUEST,
   UPDATE_PROFILE_SUCCESS,
   UPDATE_PROFILE_FAILURE,
-  SET_SOCKET_CONNECTED,
+  SET_SOCKET,
   SET_ONLINE_USERS,
 } from "./actionTypes";
 
@@ -32,11 +32,11 @@ export const checkAuth = () => async (dispatch) => {
     // Connect socket after auth
     dispatch(connectSocket(res.data._id));
   } catch (error) {
+    console.log("error in checkAuth action: ", error);
     dispatch({
       type: CHECK_AUTH_FAILURE,
       payload: error.response.data.message,
     });
-    console.log("error in checkAuth action: ", error);
   }
 };
 
@@ -106,17 +106,14 @@ export const updateProfile = (data) => async (dispatch) => {
   }
 };
 
-// handle socket connection
-let socket;
-
-// connect socket
+// Connect socket
 export const connectSocket = (userId) => (dispatch) => {
-   socket = io(BASE_URL, {
+  const socket = io(BASE_URL, {
     query: { userId },
   });
+  socket.connect();
 
-  // Dispatch an action to indicate the socket connection status
-  dispatch({ type: SET_SOCKET_CONNECTED, payload: true });
+  dispatch({ type: SET_SOCKET, payload: socket });
 
   // Handle online users
   socket.on("getOnlineUsers", (usersIds) => {
@@ -124,13 +121,12 @@ export const connectSocket = (userId) => (dispatch) => {
   });
 };
 
-// disconnect socket
-export const disconnectSocket = () => (dispatch) => {
-  if (socket) {
+// Disconnect socket
+export const disconnectSocket = () => (dispatch, getState) => {
+  const socket = getState().auth.socket;
+  if (socket?.connected) {
     socket.disconnect();
-    socket = null;
   }
 
-  // Dispatch an action to indicate the socket connection status
-  dispatch({ type: SET_SOCKET_CONNECTED, payload: false });
+  dispatch({ type: SET_SOCKET, payload: null });
 };
