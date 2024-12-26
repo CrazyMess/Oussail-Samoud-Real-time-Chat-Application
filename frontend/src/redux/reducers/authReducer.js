@@ -13,7 +13,6 @@ import {
   UPDATE_PROFILE_REQUEST,
   UPDATE_PROFILE_SUCCESS,
   UPDATE_PROFILE_FAILURE,
-  SET_SOCKET,
   SET_ONLINE_USERS, 
 } from "../actions/actionTypes";
 
@@ -23,8 +22,6 @@ const initialState = {
   isLoggingIn: false,
   isUpdatingProfile: false,
   isCheckingAuth: true,
-  isConnected: false,
-  socket: null,
   onlineUsers: [],
   error: null,
 };
@@ -47,7 +44,7 @@ const authReducer = (state = initialState, action) => {
       return { ...state, isLoggingIn: false, error: action.payload };
     
     case LOGOUT_SUCCESS:
-      return { ...state, authUser: null, socket: null, onlineUsers: [] };
+      return { ...state, authUser: null, onlineUsers: [] };
     case LOGOUT_FAILURE:
       return { ...state, error: action.payload };
     
@@ -64,9 +61,6 @@ const authReducer = (state = initialState, action) => {
       return { ...state, isUpdatingProfile: false, authUser: action.payload };
     case UPDATE_PROFILE_FAILURE:
       return { ...state, isUpdatingProfile: false, error: action.payload };
-    
-    case SET_SOCKET:
-      return { ...state, isConnected: action.payload };
 
     case SET_ONLINE_USERS:
       return { ...state, onlineUsers:action.payload };

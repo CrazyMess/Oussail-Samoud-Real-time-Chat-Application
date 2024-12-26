@@ -27,7 +27,6 @@ export const UPDATE_PROFILE_SUCCESS = "UPDATE_PROFILE_SUCCESS";
 export const UPDATE_PROFILE_FAILURE = "UPDATE_PROFILE_FAILURE";
 
 // Socket action types
-export const SET_SOCKET = "SET_SOCKET";
 export const SET_ONLINE_USERS = "SET_ONLINE_USERS";
 
 ///////////////////////////////////

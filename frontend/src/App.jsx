@@ -18,7 +18,6 @@ function App() {
 
   useEffect(() => {
     dispatch(checkAuth());
-    console.log("checkAuth");
   }, [dispatch]);
 
   //console.log({ authUser });
@@ -32,7 +31,6 @@ function App() {
   }
   return (
     <div>
-      
       <Navbar />
       <Routes>
         <Route

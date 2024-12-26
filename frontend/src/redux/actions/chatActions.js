@@ -1,5 +1,6 @@
 import { axiosInstance } from "../../lib/axios";
 import toast from "react-hot-toast";
+import { getSocket } from "../../lib/socket";
 import {
   GET_USERS_REQUEST,
   GET_USERS_SUCCESS,
@@ -63,7 +64,7 @@ export const sendMessage =
 // Subscribe to messages via socket
 export const subscribeToMessages = () => (dispatch, getState) => {
   const { selectedUser } = getState().chat;
-  const { socket } = getState().auth;
+  const socket  = getSocket();
 
   if (!selectedUser || !socket) return;
 
@@ -76,8 +77,8 @@ export const subscribeToMessages = () => (dispatch, getState) => {
 };
 
 // Unsubscribe from messages via socket
-export const unsubscribeFromMessages = () => (dispatch, getState) => {
-  const { socket } = getState().auth;
+export const unsubscribeFromMessages = () => () => {
+  const socket  = getSocket();
   if (socket) {
     socket.off("newMessage");
   }

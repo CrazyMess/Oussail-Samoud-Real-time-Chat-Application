@@ -1,6 +1,9 @@
 import { axiosInstance } from "../../lib/axios";
+import {
+  connectSocket as initSocket,
+  disconnectSocket,
+} from "../../lib/socket";
 import toast from "react-hot-toast";
-import { io } from "socket.io-client";
 import {
   SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
@@ -16,11 +19,10 @@ import {
   UPDATE_PROFILE_REQUEST,
   UPDATE_PROFILE_SUCCESS,
   UPDATE_PROFILE_FAILURE,
-  SET_SOCKET,
   SET_ONLINE_USERS,
 } from "./actionTypes";
 
-const BASE_URL = "http://localhost:5001";
+
 
 // Check auth
 export const checkAuth = () => async (dispatch) => {
@@ -108,25 +110,15 @@ export const updateProfile = (data) => async (dispatch) => {
 
 // Connect socket
 export const connectSocket = (userId) => (dispatch) => {
-  const socket = io(BASE_URL, {
-    query: { userId },
-  });
-  socket.connect();
+  const socket = initSocket(userId);
 
-  dispatch({ type: SET_SOCKET, payload: socket });
-
-  // Handle online users
-  socket.on("getOnlineUsers", (usersIds) => {
-    dispatch({ type: SET_ONLINE_USERS, payload: usersIds });
+  socket.on("getOnlineUsers", (userIds) => {
+    dispatch({ type: SET_ONLINE_USERS, payload: userIds });
   });
 };
 
 // Disconnect socket
-export const disconnectSocket = () => (dispatch, getState) => {
-  const socket = getState().auth.socket;
-  if (socket?.connected) {
-    socket.disconnect();
-  }
-
-  dispatch({ type: SET_SOCKET, payload: null });
+export const disconnectSocketAction = () => (dispatch) => {
+  disconnectSocket();
+  dispatch({ type: SET_ONLINE_USERS, payload: [] });
 };
