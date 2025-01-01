@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 
 import authRoute from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
+import friendRoutes from "./routes/friend.route.js";
 
 import { connectDB } from "./lib/dbConnect.js";
 import { app, server } from "./lib/socket.js";
@@ -28,6 +29,7 @@ const PORT = process.env.PORT;
 // Routes
 app.use("/api/auth", authRoute);
 app.use("/api/messages", messageRoutes);
+app.use("/api/friends", friendRoutes);
 
 server.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);

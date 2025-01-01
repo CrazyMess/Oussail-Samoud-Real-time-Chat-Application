@@ -51,3 +51,42 @@ export const SEND_MESSAGE_FAILURE = "SEND_MESSAGE_FAILURE";
 // chat functions action types
 export const SET_SELECTED_USER = "SET_SELECTED_USER";
 export const ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE";
+
+/////////////////////////////////////
+// ----- FRIEND ACTION TYPES ----- //
+/////////////////////////////////////
+
+// get friends action types
+export const GET_FRIENDS_REQUEST = "GET_FRIENDS_REQUEST";
+export const GET_FRIENDS_SUCCESS = "GET_FRIENDS_SUCCESS";
+export const GET_FRIENDS_FAILURE = "GET_FRIENDS_FAILURE";
+
+// get requests action types
+export const GET_REQUESTS_REQUEST = "GET_REQUESTS_REQUEST";
+export const GET_REQUESTS_SUCCESS = "GET_REQUESTS_SUCCESS";
+export const GET_REQUESTS_FAILURE = "GET_REQUESTS_FAILURE";
+
+// get pending requests action types
+export const GET_PENDING_REQUESTS_REQUEST = "GET_PENDING_REQUESTS_REQUEST";
+export const GET_PENDING_REQUESTS_SUCCESS = "GET_PENDING_REQUESTS_SUCCESS";
+export const GET_PENDING_REQUESTS_FAILURE = "GET_PENDING_REQUESTS_FAILURE";
+
+// add friend action types
+export const ADD_FRIEND_REQUEST = "ADD_FRIEND_REQUEST";
+export const ADD_FRIEND_SUCCESS = "ADD_FRIEND_SUCCESS";
+export const ADD_FRIEND_FAILURE = "ADD_FRIEND_FAILURE";
+
+// accept friend action types
+export const ACCEPT_FRIEND_REQUEST = "ACCEPT_FRIEND_REQUEST";
+export const ACCEPT_FRIEND_SUCCESS = "ACCEPT_FRIEND_SUCCESS";
+export const ACCEPT_FRIEND_FAILURE = "ACCEPT_FRIEND_FAILURE";
+
+// reject friend action types
+export const REJECT_FRIEND_REQUEST = "REJECT_FRIEND_REQUEST";
+export const REJECT_FRIEND_SUCCESS = "REJECT_FRIEND_SUCCESS";
+export const REJECT_FRIEND_FAILURE = "REJECT_FRIEND_FAILURE";
+
+// remove friend action types
+export const REMOVE_FRIEND_REQUEST = "REMOVE_FRIEND_REQUEST";
+export const REMOVE_FRIEND_SUCCESS = "REMOVE_FRIEND_SUCCESS";
+export const REMOVE_FRIEND_FAILURE = "REMOVE_FRIEND_FAILURE";
