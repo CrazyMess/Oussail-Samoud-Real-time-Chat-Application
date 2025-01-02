@@ -3,7 +3,7 @@ import { Bell, House, LogOut, User, X } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/actions/authActions";
 import { useEffect, useState } from "react";
-import { acceptFriendRequest, getRequests, rejectFriendRequest } from "../redux/actions/friendActions";
+import { acceptFriendRequest, getFriends, getRequests, rejectFriendRequest } from "../redux/actions/friendActions";
 
 const Navbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -17,12 +17,16 @@ const Navbar = () => {
     dispatch(getRequests());
   }, [dispatch]);
 
+  // TODO/FIXME: make this work from fist click (dispatch getFriends and getRequests only updates frontend after second click)
   const handleAcceptRequest = (id) => {
     dispatch(acceptFriendRequest(id));
+    dispatch(getRequests());
+    dispatch(getFriends());
   }
 
   const handleDenyRequest = (id) => {
     dispatch(rejectFriendRequest(id));
+    dispatch(getRequests());
   }
 
   const handleLogout = () => {
@@ -103,22 +107,22 @@ const Navbar = () => {
                   {requestList.map((request) => (
                     <div
                       key={request._id}
-                      className="flex items-center justify-center p-3 bg-gray-100 rounded-md shadow-md"
+                      className="flex justify-between items-center p-3 px-8 bg-base-100 rounded-md shadow-md"
                     >
                       {/* user info */}
                       <div className="flex items-center space-x-4">
                         <img
                           src={request.profilePic || "/avatar.png"}
                           alt={request.fullName}
-                          className="h-12 w-12 rounded-full object-cover border-2 border-gray-300"
+                          className="h-14 w-14 rounded-full object-cover border-2 border-gray-300"
                         />
-                        <span className="text-gray-800 font-medium">
+                        <span className="font-bold text-lg">
                           {request.fullName}
                         </span>
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="flex space-x-2">
+                      <div className="flex  space-x-2">
                         <button
                           onClick={() => handleAcceptRequest(request._id)}
                           className="bg-green-800 text-white px-3 py-1 rounded-md hover:bg-green-900 transition duration-300"

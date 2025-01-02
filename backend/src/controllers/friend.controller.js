@@ -1,6 +1,5 @@
 import User from "../models/user.model.js";
 import Friend from "../models/friend.model.js";
-import mongoose from "mongoose";
 
 // Get all friends
 export const getFriends = async (req, res) => {
@@ -14,7 +13,7 @@ export const getFriends = async (req, res) => {
 
     // get user ids of friends (excluding the current user id)
     const friendIds = friends.map((friend) => {
-      friend.requesterId !== userId ? friend.requesterId : friend.recieverId;
+      return friend.requesterId !== userId ? friend.requesterId : friend.recieverId;
     });
 
     // and then get user details of friends
@@ -103,8 +102,8 @@ export const acceptRequest = async (req, res) => {
     await Friend.findOneAndUpdate(
       {
         $or: [
-          { requesterid: friendId, recieverId: userId },
-          { requesterid: userId, recieverId: friendId },
+          { requesterId: friendId, recieverId: userId },
+          { requesterId: userId, recieverId: friendId },
         ],
       },
       {
@@ -127,8 +126,8 @@ export const rejectRequest = async (req, res) => {
 
     await Friend.findOneAndDelete({
       $or: [
-        { requesterid: friendId, recieverId: userId },
-        { requesterid: userId, recieverId: friendId },
+        { requesterId: friendId, recieverId: userId },
+        { requesterId: userId, recieverId: friendId },
       ],
     });
 
