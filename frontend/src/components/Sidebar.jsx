@@ -15,6 +15,7 @@ const Sidebar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [foundUsers, setFoundUsers] = useState([]);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [localFriendsList, setLocalFriendsList] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -22,6 +23,10 @@ const Sidebar = () => {
     dispatch(getFriends());
     dispatch(getUsers());
   }, [dispatch]);
+
+  useEffect(() => {
+    setLocalFriendsList(friendsList);
+  },[friendsList])
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -43,9 +48,10 @@ const Sidebar = () => {
 
   // TODO/FIXME: make this work from fist click (dispatch get friends only updates frontend after second click)
   const handleUnfriend = (userId) => {
-    dispatch(removeFriend(userId));
-    setActiveDropdown(null);
-    dispatch(getFriends());
+    setLocalFriendsList(localFriendsList.filter((friend) => friend._id !== userId));
+    dispatch(removeFriend(userId)).then(() =>{
+      dispatch(getFriends());
+    })
   }
 
   const toggleDropdown = (userId) => {

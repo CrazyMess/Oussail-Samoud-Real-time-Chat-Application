@@ -7,6 +7,7 @@ import { acceptFriendRequest, getFriends, getRequests, rejectFriendRequest } fro
 
 const Navbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
+  const  [localRequestList, setLocalRequestList] = useState([]);
 
   const { authUser } = useSelector((state) => state.auth);
   const { requestList } = useSelector((state) => state.friends);
@@ -17,16 +18,24 @@ const Navbar = () => {
     dispatch(getRequests());
   }, [dispatch]);
 
+  useEffect(()=>{
+    setLocalRequestList(requestList);
+  },[requestList]);
+
   // TODO/FIXME: make this work from fist click (dispatch getFriends and getRequests only updates frontend after second click)
   const handleAcceptRequest = (id) => {
-    dispatch(acceptFriendRequest(id));
-    dispatch(getRequests());
-    dispatch(getFriends());
-  }
+    setLocalRequestList(localRequestList.filter((request) => request._id !== id));
+    dispatch(acceptFriendRequest(id)).then(() => {
+      dispatch(getRequests());
+      dispatch(getFriends());
+    });
+  };
 
   const handleDenyRequest = (id) => {
-    dispatch(rejectFriendRequest(id));
-    dispatch(getRequests());
+    setLocalRequestList(localRequestList.filter((request) => request._id !== id));
+    dispatch(rejectFriendRequest(id)).then(() => {
+      dispatch(getRequests());
+    });
   }
 
   const handleLogout = () => {
@@ -64,7 +73,7 @@ const Navbar = () => {
 
               {/* Friend Requests */}
               <div
-                className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:text-gray-800
+                className="relative h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:text-gray-800
                hover:bg-white  hover:duration-300 hover:ease-linear focus:bg-white"
               >
                 <Bell
@@ -72,6 +81,12 @@ const Navbar = () => {
                   strokeWidth={2}
                   onClick={() => setShowNotifications(!showNotifications)}
                 />
+                {localRequestList.length > 0 && (
+                  <span
+                    className="absolute top-0 right-0 bg-white text-gray-800 border-2 border-gray-800 text-s font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                      {localRequestList.length}
+                    </span>
+                )}
               </div>
 
               {/* Logout */}
@@ -102,9 +117,9 @@ const Navbar = () => {
 
             {/* Bottom Section: List of Found Users */}
             <div className="flex-1 overflow-y-auto">
-              {requestList.length > 0 ? (
+              {localRequestList.length > 0 ? (
                 <div>
-                  {requestList.map((request) => (
+                  {localRequestList.map((request) => (
                     <div
                       key={request._id}
                       className="flex justify-between items-center p-3 px-8 bg-base-100 rounded-md shadow-md"
