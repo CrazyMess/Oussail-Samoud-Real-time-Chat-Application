@@ -4,20 +4,23 @@ import Friend from "../models/friend.model.js";
 // Get all friends
 export const getFriends = async (req, res) => {
   try {
-    const userId = req.user._id;
+    const loggedInUser = req.user._id;
 
     const friends = await Friend.find({
-      $or: [{ requesterId: userId }, { recieverId: userId }],
+      $or: [{ requesterId: loggedInUser }, { recieverId: loggedInUser }],
       status: true,
     });
 
     // get user ids of friends (excluding the current user id)
     const friendIds = friends.map((friend) => {
-      return friend.requesterId !== userId ? friend.requesterId : friend.recieverId;
+      console.log(friend.requesterId);
+      console.log(loggedInUser);
+      console.log(friend.requesterId !== loggedInUser);
+      return friend.requesterId.toString() !== loggedInUser.toString() ? friend.requesterId : friend.recieverId;
     });
 
     // and then get user details of friends
-    const users = await User.find({ _id: { $in: friendIds } });
+    const users = await User.find({ _id: { $in: friendIds } }).select("-password");
 
     res.status(200).json(users);
   } catch (error) {

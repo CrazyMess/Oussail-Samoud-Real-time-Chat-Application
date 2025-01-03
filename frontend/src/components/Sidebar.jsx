@@ -46,7 +46,6 @@ const Sidebar = () => {
     dispatch(sendFriendRequest(userId));
   };
 
-  // TODO/FIXME: make this work from fist click (dispatch get friends only updates frontend after second click)
   const handleUnfriend = (userId) => {
     setLocalFriendsList(localFriendsList.filter((friend) => friend._id !== userId));
     dispatch(removeFriend(userId)).then(() =>{
@@ -59,8 +58,8 @@ const Sidebar = () => {
   }
 
   const filteredUsers = showOnlineOnly
-    ? friendsList.filter((user) => onlineUsers.includes(user._id))
-    : friendsList;
+    ? localFriendsList.filter((user) => onlineUsers.includes(user._id))
+    : localFriendsList;
 
   if (isUsersLoading) return <SidebarSkeleton />;
 
