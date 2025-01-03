@@ -13,9 +13,6 @@ export const getFriends = async (req, res) => {
 
     // get user ids of friends (excluding the current user id)
     const friendIds = friends.map((friend) => {
-      console.log(friend.requesterId);
-      console.log(loggedInUser);
-      console.log(friend.requesterId !== loggedInUser);
       return friend.requesterId.toString() !== loggedInUser.toString() ? friend.requesterId : friend.recieverId;
     });
 
