@@ -51,7 +51,7 @@ const chatReducer = (state = initialState, action) => {
       return { ...state, isSendingMessage: false, error: action.payload };
 
     case SET_SELECTED_USER:
-      return { ...state, selectedUser: action.payload, messages: [] };
+      return { ...state, selectedUser: action.payload };
 
     case ADD_NEW_MESSAGE:
       return { ...state, messages: [...state.messages, action.payload] };

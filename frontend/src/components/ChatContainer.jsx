@@ -19,15 +19,19 @@ const ChatContainer = () => {
   const dispatch = useDispatch();
   const messageEndRef = useRef(null);
 
-  useEffect(() => {
-    dispatch(getMessages(selectedUser._id));
 
+
+  useEffect(() => {
+        dispatch(getMessages(selectedUser._id))
+    
+    
+    // Subscribe to real-time messages
     dispatch(subscribeToMessages());
 
     return () => {
       dispatch(unsubscribeFromMessages());
     };
-  }, [dispatch, selectedUser._id]);
+  }, [dispatch, selectedUser]);
 
   useEffect(() => {
     if (messageEndRef.current && messages) {

@@ -3,11 +3,17 @@ import { Bell, House, LogOut, User, X } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/actions/authActions";
 import { useEffect, useState } from "react";
-import { acceptFriendRequest, getFriends, getRequests, rejectFriendRequest } from "../redux/actions/friendActions";
+import {
+  acceptFriendRequest,
+  getFriends,
+  getRequests,
+  rejectFriendRequest,
+} from "../redux/actions/friendActions";
 
 const Navbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
-  const  [localRequestList, setLocalRequestList] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [localRequestList, setLocalRequestList] = useState([]);
 
   const { authUser } = useSelector((state) => state.auth);
   const { requestList } = useSelector((state) => state.friends);
@@ -18,13 +24,14 @@ const Navbar = () => {
     dispatch(getRequests());
   }, [dispatch]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setLocalRequestList(requestList);
-  },[requestList]);
+  }, [requestList]);
 
-  // TODO/FIXME: make this work from fist click (dispatch getFriends and getRequests only updates frontend after second click)
   const handleAcceptRequest = (id) => {
-    setLocalRequestList(localRequestList.filter((request) => request._id !== id));
+    setLocalRequestList(
+      localRequestList.filter((request) => request._id !== id)
+    );
     dispatch(acceptFriendRequest(id)).then(() => {
       dispatch(getRequests());
       dispatch(getFriends());
@@ -32,11 +39,13 @@ const Navbar = () => {
   };
 
   const handleDenyRequest = (id) => {
-    setLocalRequestList(localRequestList.filter((request) => request._id !== id));
+    setLocalRequestList(
+      localRequestList.filter((request) => request._id !== id)
+    );
     dispatch(rejectFriendRequest(id)).then(() => {
       dispatch(getRequests());
     });
-  }
+  };
 
   const handleLogout = () => {
     dispatch(logout());
@@ -45,14 +54,15 @@ const Navbar = () => {
   return (
     <div>
       {/* Sidebar */}
-      <div className="h-screen absolute flex overflow-hidden">
-        <aside
-          className="h-full w-16 flex flex-col space-y-10 items-center justify-center 
-      relative bg-gray-800 text-white"
-        >
+      <div
+        className={`absolute h-screen z-40 bg-gray-800 text-white ${
+          isSidebarOpen ? "block" : "hidden"
+        } lg:block`}
+      >
+        <aside className="h-full w-16 lg:w-20 flex flex-col items-center space-y-10 justify-center ">
           {/* home */}
           <div
-            className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer hover:text-gray-800
+            className="h-10 w-10 lg:w-20 flex items-center justify-center rounded-lg cursor-pointer hover:text-gray-800
         hover:bg-white  hover:duration-300 hover:ease-linear focus:bg-white"
           >
             <Link to="/">
@@ -82,10 +92,9 @@ const Navbar = () => {
                   onClick={() => setShowNotifications(!showNotifications)}
                 />
                 {localRequestList.length > 0 && (
-                  <span
-                    className="absolute top-0 right-0 bg-white text-gray-800 border-2 border-gray-800 text-s font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                      {localRequestList.length}
-                    </span>
+                  <span className="absolute top-0 right-0 bg-white text-gray-800 border-2 border-gray-800 text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {localRequestList.length}
+                  </span>
                 )}
               </div>
 
@@ -102,11 +111,22 @@ const Navbar = () => {
           )}
         </aside>
       </div>
+      {/* Sidebar Toggle Button */}
+      <button
+        className="lg:hidden fixed top-4 left-4 z-50 bg-gray-800 text-white p-2 rounded-full"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        {isSidebarOpen ? (
+          <X size={24} strokeWidth={2} />
+        ) : (
+          <House size={24} strokeWidth={2} />
+        )}
+      </button>
 
-      {/* Request list modal */}
+      {/*  Friend Requests Modal  */}
       {showNotifications && (
         <div className="fixed  inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-base-300 rounded-lg p-6 w-1/3 flex flex-col">
+          <div className="bg-base-300 rounded-lg p-6 w-11/12 sm:w-2/3 lg:w-1/3 flex flex-col">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold">Friend Requests</h2>
               <X
@@ -122,31 +142,31 @@ const Navbar = () => {
                   {localRequestList.map((request) => (
                     <div
                       key={request._id}
-                      className="flex justify-between items-center p-3 px-8 bg-base-100 rounded-md shadow-md"
+                      className="flex justify-between items-center p-3 px-8 bg-base-100 rounded-md shadow-md mb-2"
                     >
                       {/* user info */}
                       <div className="flex items-center space-x-4">
                         <img
                           src={request.profilePic || "/avatar.png"}
                           alt={request.fullName}
-                          className="h-14 w-14 rounded-full object-cover border-2 border-gray-300"
+                          className="h-10 w-10 sm:h-14 sm:w-14 rounded-full object-cover border-2 border-gray-300"
                         />
-                        <span className="font-bold text-lg">
+                        <span className="font-bold text-sm sm:text-lg">
                           {request.fullName}
                         </span>
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="flex  space-x-2">
+                      <div className="flex space-x-2">
                         <button
                           onClick={() => handleAcceptRequest(request._id)}
-                          className="bg-green-800 text-white px-3 py-1 rounded-md hover:bg-green-900 transition duration-300"
+                          className="bg-green-800 text-white px-2 sm:px-3 py-1 rounded-md hover:bg-green-900 transition duration-300"
                         >
                           ✓ Accept
                         </button>
                         <button
                           onClick={() => handleDenyRequest(request._id)}
-                          className="bg-red-800 text-white px-3 py-1 rounded-md hover:bg-red-900 transition duration-300"
+                          className="bg-red-800 text-white px-2 sm:px-3 py-1 rounded-md hover:bg-red-900 transition duration-300"
                         >
                           ✕ Deny
                         </button>
@@ -163,36 +183,6 @@ const Navbar = () => {
           </div>
         </div>
       )}
-
-      <div className="w-full flex flex-col justify-between">
-        {/* Header */}
-        <header className="h-16 w-full flex items-center relative justify-end px-5 space-x-10 bg-gray-800">
-          {authUser ? (
-            <div className="flex flex-shrink-0 items-center space-x-4 text-white">
-              <div className="flex flex-col items-end">
-                <div className="text-md font-bold">{authUser.fullName}</div>
-              </div>
-
-              <div className="h-10 w-10 rounded-full bg-gray-200 border-2 border-blue-400">
-                <img
-                  src={authUser.profilePic || "/avatar.png"}
-                  alt="Profile"
-                  className="rounded-full object-cover "
-                />
-              </div>
-            </div>
-          ) : (
-            <Link
-              to="/login"
-              className="flex items-center mx-4 p-3 px-5 text-white text-lg font-bold
-               bg-slate-600 rounded-xl hover:text-gray-800 hover:bg-white
-               hover:duration-300 hover:ease-linear focus:bg-white"
-            >
-              Login
-            </Link>
-          )}
-        </header>
-      </div>
     </div>
   );
 };

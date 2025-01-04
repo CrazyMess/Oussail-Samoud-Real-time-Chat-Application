@@ -57,14 +57,16 @@ const Sidebar = () => {
     setActiveDropdown((prev) => (prev === userId ? null : userId));
   }
 
+  const onlineFriends = localFriendsList.filter((user) => onlineUsers.includes(user._id));
+
   const filteredUsers = showOnlineOnly
-    ? localFriendsList.filter((user) => onlineUsers.includes(user._id))
+    ? localFriendsList.filter((user) => onlineFriends.includes(user._id))
     : localFriendsList;
 
   if (isUsersLoading) return <SidebarSkeleton />;
 
   return (
-    <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">
+    <aside className={`h-full "w-20" lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200`}>
       <div className="flex flex-col border-b border-base-300 w-full p-5">
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
@@ -91,7 +93,7 @@ const Sidebar = () => {
             <span className="text-sm">Show Online only</span>
           </label>
           <span className="text-xs text-zinc-500">
-            ({onlineUsers.length - 1} online)
+            ({onlineFriends.length} online)
           </span>
         </div>
       </div>
